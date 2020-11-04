@@ -1,5 +1,11 @@
+- name: creat s3 bucket
+  amazon.aws.s3_bucket:
+    name: '{{ s3_bucket }}'
+    versioning: yes
+    region: '{{ aws_region }}'
+
 - name: copy package to s3
-  s3:
+  amazon.aws.aws_s3:
     mode: put
     src: build/{{ zip_name }}
     region: '{{ aws_region }}'

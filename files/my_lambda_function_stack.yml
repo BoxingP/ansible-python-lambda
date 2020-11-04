@@ -9,6 +9,9 @@ Parameters:
   S3ObjectVersion:
     Description: Version of the S3 Key to use
     Type: String
+  Email:
+    Description: An email address that can receive notifications
+    Type: String
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -30,7 +33,8 @@ Resources:
                   - 'logs:CreateLogGroup'
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
-                Resource: 'arn:aws:logs:*:*:*'
+                  - 'logs:DescribeLogStreams'
+                Resource: 'arn:aws-cn:logs:*:*:*'
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -41,13 +45,13 @@ Resources:
       Handler: main.lambda_handler
       MemorySize: 128
       Role: {'Fn::GetAtt': [IAMRole, Arn]}
-      Runtime: python2.7
+      Runtime: python3.7
       Timeout: 300
   Schedule:
     Type: AWS::Events::Rule
     Properties:
-      Description: Every day at 0800
-      ScheduleExpression: cron(0 8 * * ? *)
+      Description: Every day at 0900 and 1800
+      ScheduleExpression: cron(0 9-18/9 * * ? *)
       Targets:
         - Id: TriggerMyLambdaFunction
           Arn: {'Fn::GetAtt': [LambdaFunction, Arn]}
@@ -64,7 +68,7 @@ Resources:
       DisplayName: Tell the creator about failures in this lambda function.
       Subscription:
         - Protocol: email
-          Endpoint: creator@example.com
+          Endpoint: {Ref: Email}
   LambdaFunctionFailures:
     Type: AWS::CloudWatch::Alarm
     Properties:

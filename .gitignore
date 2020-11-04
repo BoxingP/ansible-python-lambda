@@ -1,3 +1,6 @@
 /build/*
 /workspace/
 playbook.retry
+.idea/
+.vault_pass
+aws_credentials.yaml

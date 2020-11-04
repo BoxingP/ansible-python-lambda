@@ -1,18 +1,23 @@
 - name: deploy my_lambda_function
-  hosts: 127.0.0.1
-  connection: local
+  hosts: local
   vars:
-    aws_region: eu-west-1
+    aws_region: cn-northwest-1
     s3_bucket: my-lambda-bucket
     code_path: my_lambda_function/
     zip_name: my_lambda_function.zip
+    email_address: boxing.peng@thermofisher.com
+  vars_files:
+    - aws_credentials.yaml
+  environment:
+    AWS_ACCESS_KEY_ID: '{{ dscops.AWS_ACCESS_KEY_ID }}'
+    AWS_SECRET_ACCESS_KEY: '{{ dscops.AWS_SECRET_ACCESS_KEY }}'
   tasks:
     - include: includes/init_workspace.yml
     - include: includes/build_zip.yml
     - include: includes/copy_to_s3.yml
 
     - name: cloudformation stack
-      cloudformation:
+      amazon.aws.cloudformation:
         region: '{{ aws_region }}'
         stack_name: my-lambda-function
         template: files/my_lambda_function_stack.yml
@@ -21,3 +26,11 @@
           S3Bucket: '{{ s3_bucket }}'
           S3Key: '{{ zip_name }}'
           S3ObjectVersion: '{{ s3_version_id }}'
+          Email: '{{ email_address }}'
+        tags:
+          Description: Deployed Lambda function by Ansible
+          businessunit: DSC
+          team name: DSC
+          application owner: '{{ email_address }}'
+          project: Ops Productivity
+          division: DSC
