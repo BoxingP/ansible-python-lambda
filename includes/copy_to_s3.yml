@@ -3,6 +3,8 @@
     name: '{{ s3_bucket }}'
     versioning: yes
     region: '{{ aws_region }}'
+    tags:
+      '{{ aws_tags }}'
 
 - name: copy package to s3
   amazon.aws.aws_s3:

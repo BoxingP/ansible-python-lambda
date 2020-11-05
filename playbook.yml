@@ -8,6 +8,7 @@
     email_address: boxing.peng@thermofisher.com
   vars_files:
     - aws_credentials.yaml
+    - tags.yaml
   environment:
     AWS_ACCESS_KEY_ID: '{{ dscops.AWS_ACCESS_KEY_ID }}'
     AWS_SECRET_ACCESS_KEY: '{{ dscops.AWS_SECRET_ACCESS_KEY }}'
@@ -28,9 +29,4 @@
           S3ObjectVersion: '{{ s3_version_id }}'
           Email: '{{ email_address }}'
         tags:
-          Description: Deployed Lambda function by Ansible
-          businessunit: DSC
-          team name: DSC
-          application owner: '{{ email_address }}'
-          project: Ops Productivity
-          division: DSC
+          '{{ aws_tags }}'
