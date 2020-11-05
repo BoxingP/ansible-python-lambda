@@ -10,8 +10,8 @@
     - aws_credentials.yaml
     - tags.yaml
   environment:
-    AWS_ACCESS_KEY_ID: '{{ dscops.AWS_ACCESS_KEY_ID }}'
-    AWS_SECRET_ACCESS_KEY: '{{ dscops.AWS_SECRET_ACCESS_KEY }}'
+    AWS_ACCESS_KEY_ID: '{{ dscops.aws_access_key_id }}'
+    AWS_SECRET_ACCESS_KEY: '{{ dscops.aws_secret_access_key }}'
   tasks:
     - include: includes/init_workspace.yml
     - include: includes/build_zip.yml
@@ -24,6 +24,7 @@
         template: files/my_lambda_function_stack.yml
         template_format: yaml
         template_parameters:
+          AWSAccountId: '{{ dscops.account_id }}'
           S3Bucket: '{{ s3_bucket }}'
           S3Key: '{{ zip_name }}'
           S3ObjectVersion: '{{ s3_version_id }}'

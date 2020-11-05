@@ -1,5 +1,8 @@
 Description: My Lambda Function
 Parameters:
+  AWSAccountId:
+    Description: AWS Account Id
+    Type: String
   S3Bucket:
     Description: S3 Bucket where the Lambda code is
     Type: String
@@ -33,8 +36,7 @@ Resources:
                   - 'logs:CreateLogGroup'
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
-                  - 'logs:DescribeLogStreams'
-                Resource: 'arn:aws-cn:logs:*:*:*'
+                Resource: !Sub 'arn:aws-cn:logs:*:${AWSAccountId}:*'
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
