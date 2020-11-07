@@ -1,18 +1,23 @@
 - name: deploy my_lambda_function
   hosts: local
+  gather_facts: yes
   vars:
     aws_region: cn-northwest-1
     s3_bucket: my-lambda-bucket
     code_path: my_lambda_function/
     zip_name: my_lambda_function.zip
     email_address: boxing.peng@thermofisher.com
+    virtualenv_home: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs'
+    virtualenv: '{{ virtualenv_home }}/ansible-python-lambda-env'
   vars_files:
     - aws_credentials.yaml
     - tags.yaml
+    - sudo_passwords.yaml
   environment:
     AWS_ACCESS_KEY_ID: '{{ dscops.aws_access_key_id }}'
     AWS_SECRET_ACCESS_KEY: '{{ dscops.aws_secret_access_key }}'
   tasks:
+    - include: includes/init_environment.yml
     - include: includes/init_workspace.yml
     - include: includes/build_zip.yml
     - include: includes/copy_to_s3.yml
@@ -22,7 +27,6 @@
         region: '{{ aws_region }}'
         stack_name: my-lambda-function
         template: files/my_lambda_function_stack.yml
-        template_format: yaml
         template_parameters:
           AWSAccountId: '{{ dscops.account_id }}'
           S3Bucket: '{{ s3_bucket }}'
@@ -31,3 +35,5 @@
           Email: '{{ email_address }}'
         tags:
           '{{ aws_tags }}'
+      vars:
+        ansible_python_interpreter: '{{ virtualenv }}/bin/python3'

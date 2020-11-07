@@ -1,0 +1,21 @@
+- name: update apt cache
+  apt: update_cache=yes cache_valid_time=86400
+  become: yes
+  ignore_errors: yes
+
+- name: update all packages
+  apt: upgrade=dist
+  become: yes
+
+- name: get absolute path of library
+  changed_when: false
+  command: pwd
+  args:
+    chdir: library
+  register: abs_library_path
+
+- name: create the initial virtualenv
+  pip:
+    requirements: '{{ abs_library_path.stdout }}/requirements.txt'
+    virtualenv: '{{ virtualenv }}'
+    virtualenv_command: /usr/bin/python3 -m venv
