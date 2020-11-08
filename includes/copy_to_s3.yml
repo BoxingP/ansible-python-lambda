@@ -5,8 +5,6 @@
     region: '{{ aws_region }}'
     tags:
       '{{ aws_tags }}'
-  vars:
-    ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
 
 - name: copy package to s3
   amazon.aws.aws_s3:
@@ -15,8 +13,6 @@
     region: '{{ aws_region }}'
     bucket: '{{ s3_bucket }}'
     object: '{{ zip_name }}'  # versioning on for bucket
-  vars:
-    ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
 
 - name: find the s3 version we just uploaded
   command: >
@@ -25,8 +21,6 @@
       --bucket {{ s3_bucket }}
       --key {{ zip_name }}
   register: head_object_output
-  vars:
-    ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
 
 - name: set s3_version_id
   set_fact:

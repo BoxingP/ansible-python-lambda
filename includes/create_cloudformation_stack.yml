@@ -1,0 +1,13 @@
+- name: cloudformation stack
+  amazon.aws.cloudformation:
+    region: '{{ aws_region }}'
+    stack_name: my-lambda-function
+    template: files/my_lambda_function_stack.yml
+    template_parameters:
+      AWSAccountId: '{{ dscops.account_id }}'
+      S3Bucket: '{{ s3_bucket }}'
+      S3Key: '{{ zip_name }}'
+      S3ObjectVersion: '{{ s3_version_id }}'
+      Email: '{{ email_address }}'
+    tags:
+      '{{ aws_tags }}'
