@@ -9,11 +9,11 @@
     path: workspace/
     state: directory
 
-- name: copy in code
-  synchronize:
-    src: '{{ code_path }}'
+- name: git checkout codes
+  git:
+    repo: '{{ git_repo }}'
     dest: workspace/
-    delete: yes
+    accept_hostkey: yes
 
 - name: setup.cfg for no prefix
   copy:

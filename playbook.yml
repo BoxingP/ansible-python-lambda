@@ -4,7 +4,7 @@
   vars:
     aws_region: cn-northwest-1
     s3_bucket: my-lambda-bucket
-    code_path: my_lambda_function/
+    git_repo: git@github.com:BoxingP/aws-lambda-python-function.git
     zip_name: my_lambda_function.zip
     email_address: boxing.peng@thermofisher.com
     virtualenv_home: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs'
