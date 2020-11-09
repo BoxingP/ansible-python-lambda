@@ -37,6 +37,29 @@ Resources:
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
                 Resource: !Sub 'arn:aws-cn:logs:*:${AWSAccountId}:*'
+        - PolicyName: Operating-ec2
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:StartInstances'
+                  - 'ec2:StopInstances'
+                Resource: !Sub 'arn:aws-cn:ec2:*:${AWSAccountId}:instance/*'
+              - Effect: Allow
+                Action:
+                  - 'ec2:DescribeInstances'
+                Resource: '*'
+        - PolicyName: Operating-rds
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'rds:DescribeDBInstances'
+                  - 'rds:StopDBInstance'
+                  - 'rds:StartDBInstance'
+                Resource: !Sub 'arn:aws-cn:rds:*:${AWSAccountId}:db:*'
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -48,7 +71,7 @@ Resources:
       MemorySize: 128
       Role: {'Fn::GetAtt': [IAMRole, Arn]}
       Runtime: python3.7
-      Timeout: 300
+      Timeout: 900
   Schedule:
     Type: AWS::Events::Rule
     Properties:
