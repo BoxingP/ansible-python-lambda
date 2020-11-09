@@ -12,8 +12,16 @@
 - name: git checkout codes
   git:
     repo: '{{ git_repo }}'
+    depth: 1
+    version: master
     dest: workspace/
     accept_hostkey: yes
+
+- name: remove .git dir
+  file:
+    path: workspace/.git/
+    state: absent
+    force: yes
 
 - name: setup.cfg for no prefix
   copy:
