@@ -7,8 +7,7 @@
     git_repo: git@github.com:BoxingP/aws-lambda-python-function.git
     zip_name: my_lambda_function.zip
     email_address: boxing.peng@thermofisher.com
-    virtualenv_home: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs'
-    virtualenv: '{{ virtualenv_home }}/ansible-python-lambda-env'
+    virtualenv: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs/ansible-python-lambda-env'
   vars_files:
     - aws_credentials.yaml
     - tags.yaml
@@ -17,12 +16,11 @@
     AWS_ACCESS_KEY_ID: '{{ dscops.aws_access_key_id }}'
     AWS_SECRET_ACCESS_KEY: '{{ dscops.aws_secret_access_key }}'
   tasks:
-    - include: includes/init_environment.yml
-    - include: includes/init_workspace.yml
-    - include: includes/build_zip.yml
-    - include: includes/copy_to_s3.yml
-      vars:
-        ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
-    - include: includes/create_cloudformation_stack.yml
+    - include_tasks: includes/init_environment.yml
+    - include_tasks: includes/init_workspace.yml
+    - include_tasks: includes/build_zip.yml
+    - block:
+        - include_tasks: includes/copy_to_s3.yml
+        - include_tasks: includes/create_cloudformation_stack.yml
       vars:
         ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
