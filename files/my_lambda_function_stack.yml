@@ -15,6 +15,12 @@ Parameters:
   Email:
     Description: An email address that can receive notifications
     Type: String
+  CronSchedule:
+    Description: Cron type schedule
+    Type: String
+  ScheduleDescription:
+    Description: Schedule Description
+    Type: String
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -75,8 +81,8 @@ Resources:
   Schedule:
     Type: AWS::Events::Rule
     Properties:
-      Description: Every day at 0900 and 1800
-      ScheduleExpression: cron(0 9-18/9 * * ? *)
+      Description: {Ref: ScheduleDescription}
+      ScheduleExpression: {Ref: CronSchedule}
       Targets:
         - Id: TriggerMyLambdaFunction
           Arn: {'Fn::GetAtt': [LambdaFunction, Arn]}
