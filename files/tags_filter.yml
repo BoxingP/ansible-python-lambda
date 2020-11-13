@@ -1,0 +1,3 @@
+aws_tags:
+  - schedule: 'yes'
+  - project: 'LIMS'

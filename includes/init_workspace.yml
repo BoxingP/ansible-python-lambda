@@ -23,6 +23,14 @@
     state: absent
     force: yes
 
+- name: copy in condition
+  synchronize:
+    src: files/{{ item }}
+    dest: workspace/
+    delete: yes
+  with_items:
+    ['tags_filter.yml', 'policy.py']
+
 - name: setup.cfg for no prefix
   copy:
     dest: workspace/setup.cfg
