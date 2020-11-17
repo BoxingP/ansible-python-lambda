@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: get_absolute_path_of_directory
+    vars:
+      directory: 'library'

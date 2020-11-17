@@ -1,0 +1,8 @@
+---
+dependencies:
+  - role: get_absolute_path_of_directory
+    vars:
+      directory: 'build'
+  - role: get_absolute_path_of_directory
+    vars:
+      directory: 'workspace'

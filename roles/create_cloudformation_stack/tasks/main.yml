@@ -1,0 +1,9 @@
+- name: create cloudformation stack
+  amazon.aws.cloudformation:
+    region: '{{ aws_region }}'
+    stack_name: '{{ cloudformation_stack_name }}'
+    template: '{{ cloudformation_template }}'
+    template_parameters:
+      '{{ cloudformation_template_parameters }}'
+    tags:
+      '{{ cloudformation_tags }}'

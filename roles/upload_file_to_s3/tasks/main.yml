@@ -1,0 +1,7 @@
+- name: upload file to s3
+  amazon.aws.aws_s3:
+    mode: put
+    src: '{{ file_path }}'
+    region: '{{ aws_region }}'
+    bucket: '{{ s3_bucket_name }}'
+    object: '{{ s3_object_name }}'

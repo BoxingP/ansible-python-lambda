@@ -1,0 +1,12 @@
+- name: remove any old zip
+  file:
+    path: '{{ abs_build_path }}/{{ zip_name }}'
+    state: absent
+
+- name: zip package
+  command: >
+    zip -r
+    {{ abs_build_path }}/{{ zip_name }}
+    .
+  args:
+    chdir: '{{ abs_workspace_path }}'

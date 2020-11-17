@@ -1,0 +1,5 @@
+- name: 'remove {{ directory_to_remove }} directory'
+  file:
+    path: '{{ directory_to_remove }}'
+    state: absent
+    force: yes

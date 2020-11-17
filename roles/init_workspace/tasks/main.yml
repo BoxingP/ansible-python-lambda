@@ -1,0 +1,57 @@
+- name: create {{ workspace_directory }} dir
+  file:
+    path: '{{ workspace_directory }}'
+    state: directory
+
+- name: get absolute path of {{ workspace_directory }}
+  include_role:
+    name: get_absolute_path_of_directory
+  vars:
+    directory: '{{ workspace_directory }}'
+
+- name: git checkout codes
+  git:
+    repo: '{{ git_repo }}'
+    depth: 1
+    version: master
+    dest: '{{ workspace_directory }}'
+    accept_hostkey: yes
+
+- name: remove .git dir
+  include_role:
+    name: remove_directory
+  vars:
+    directory_to_remove: '{{ workspace_directory }}/.git'
+
+- name: copy in condition
+  synchronize:
+    src: 'files/{{ item }}'
+    dest: '{{ workspace_directory }}'
+    delete: yes
+  with_items:
+    [ 'tags_filter.yml', 'policy.py' ]
+
+- name: setup.cfg for no prefix
+  copy:
+    dest: '{{ workspace_directory }}/setup.cfg'
+    content: |
+      [install]
+      prefix=
+
+- name: check for requirements.txt
+  changed_when: false
+  stat:
+    path: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}/requirements.txt"
+  register: requirements_result
+
+- name: install dependencies
+  when: requirements_result.stat.exists
+  pip:
+    chdir: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}"
+    extra_args: '-t .'
+    requirements: requirements.txt
+
+- name: erase .pyc files
+  command: find . -type f -name "*.py[co]" -delete
+  args:
+    chdir: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}"

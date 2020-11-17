@@ -1,0 +1,7 @@
+- name: creat s3 bucket
+  amazon.aws.s3_bucket:
+    name: '{{ s3_bucket_name }}'
+    versioning: yes
+    region: '{{ aws_region }}'
+    tags:
+      '{{ s3_tags }}'
