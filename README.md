@@ -14,9 +14,9 @@ Requirements
 Usage
 -----
 
-1. Run `ansible-galaxy install -r requirements.yml`. It will install roles included in `requirements.yml`.
+1. Run `ansible-galaxy install -r requirements.yaml`. It will install roles included in `requirements.yaml`.
 
-1. Run `ansible-playbook playbook.yml`. It will create a Cloudformation stack
+1. Run `ansible-playbook playbook.yaml`. It will create a Cloudformation stack
    in your AWS account called `my-lambda-function` that runs the example Lambda
    function.
 

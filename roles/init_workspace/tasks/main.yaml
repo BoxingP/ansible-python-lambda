@@ -29,7 +29,7 @@
     dest: '{{ workspace_directory }}'
     delete: yes
   with_items:
-    [ 'tags_filter.yml', 'policy.py' ]
+    [ 'tags_filter.yaml', 'policy.py' ]
 
 - name: setup.cfg for no prefix
   copy:

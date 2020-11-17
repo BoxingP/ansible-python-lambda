@@ -62,7 +62,7 @@
             name: create_cloudformation_stack
           vars:
             cloudformation_stack_name: '{{ lambda_function_name }}'
-            cloudformation_template: files/my_lambda_function_stack.yml
+            cloudformation_template: files/my_lambda_function_stack.yaml
             cloudformation_template_parameters: '{{ stack_template_parameters }}'
             cloudformation_tags: '{{ aws_resource_tags }}'
       vars:
