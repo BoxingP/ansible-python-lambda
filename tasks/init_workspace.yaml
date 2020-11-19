@@ -1,4 +1,10 @@
-- name: create {{ workspace_directory }} dir
+- name: remove exist {{ workspace_directory }} directory
+  include_role:
+    name: remove_directory
+  vars:
+      directory_to_remove: '{{ workspace_directory }}'
+
+- name: create {{ workspace_directory }} directory
   file:
     path: '{{ workspace_directory }}'
     state: directory
@@ -10,30 +16,22 @@
     directory: '{{ workspace_directory }}'
 
 - name: git checkout codes
-  git:
-    repo: '{{ git_repo }}'
-    depth: 1
-    version: master
-    dest: '{{ workspace_directory }}'
-    accept_hostkey: yes
-
-- name: remove .git dir
   include_role:
-    name: remove_directory
+    name: git_checkout
   vars:
-    directory_to_remove: '{{ workspace_directory }}/.git'
+    git_checkout_directory: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}"
 
 - name: copy in condition
   synchronize:
     src: 'files/{{ item }}'
-    dest: '{{ workspace_directory }}'
+    dest: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}"
     delete: yes
   with_items:
     [ 'tags_filter.yaml', 'policy.py' ]
 
 - name: setup.cfg for no prefix
   copy:
-    dest: '{{ workspace_directory }}/setup.cfg'
+    dest: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}/setup.cfg"
     content: |
       [install]
       prefix=

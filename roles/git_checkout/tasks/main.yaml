@@ -1,0 +1,14 @@
+- name: git checkout codes
+  git:
+    repo: '{{ git_repo }}'
+    depth: 1
+    version: master
+    dest: '{{ git_checkout_directory }}'
+    force: yes
+    accept_hostkey: yes
+
+- name: remove .git directory
+  include_role:
+    name: remove_directory
+  vars:
+    directory_to_remove: "{{ git_checkout_directory }}/.git"

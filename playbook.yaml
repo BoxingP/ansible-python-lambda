@@ -1,24 +1,24 @@
 - name: get hosts facts
   hosts: all
   gather_facts: yes
-  vars_files:
-    - sudo_passwords.yaml
 
-- name: deploy my_lambda_function
-  hosts: ubuntu
+- name: deploy lambda function
+  hosts: localhost
   gather_facts: no
   vars:
     aws_region: cn-northwest-1
-    lambda_function_name: my-lambda-function
     git_repo: git@github.com:BoxingP/aws-lambda-python-function.git
+    lambda_function_name: start_stop_instance
     zip_name: '{{ lambda_function_name }}.zip'
-    email_address: boxing.peng@thermofisher.com
-    virtualenv: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs/ansible-python-lambda-env'
+    lambda_function_directory: workspace
+    s3_bucket_name: aws-lambda-functions
+    s3_object_name: '{{ zip_name }}'
+    email_address: creator@example.com
+    virtualenv: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs/ansible-lambda-python-env'
     cron_schedule: 'cron(0 1-10/9 ? * MON-FRI *)'  #UTC
     schedule_description: 'Weekdays at 0900 and 1800'
   vars_files:
-    - aws_credentials.yaml
-    - sudo_passwords.yaml
+    - vars/aws_credentials.yaml
   tasks:
     - name: init server environment
       block:
@@ -26,44 +26,36 @@
             name: 'update_{{ ansible_distribution|lower }}_environment'
         - include_role:
             name: create_python_virtualenv
-        - include_role:
-            name: init_workspace
+        - include_tasks: tasks/init_workspace.yaml
           vars:
-            workspace_directory: workspace
+            workspace_directory: '{{ lambda_function_directory }}'
         - include_role:
             name: build_zip_file
+          vars:
+            files_need_to_zip_directory: '{{ lambda_function_directory }}'
     - name: build aws environment
       block:
         - name: load aws tags needed to add when creating resources
           include_vars:
-            file: resource_tags.yaml
+            file: files/resource_tags.yaml
             name: aws_resource_tags
         - include_role:
             name: create_s3_bucket
           vars:
-            s3_bucket_name: '{{ lambda_function_name }}'
             s3_tags: '{{ aws_resource_tags }}'
         - include_role:
             name: upload_file_to_s3
-          vars:
-            s3_bucket_name: '{{ lambda_function_name }}'
-            file_path: 'build/{{ zip_name }}'
-            s3_object_name: '{{ zip_name }}'
         - include_role:
             name: get_s3_object_version_id
-          vars:
-            s3_bucket_name: '{{ lambda_function_name }}'
-            s3_object_name: '{{ zip_name }}'
-        - name: load cloudformation stack template parameters
+        - name: load cloudformation template parameters
           include_vars:
-            file: template_parameters.yaml
-            name: stack_template_parameters
+            file: files/lambda_function_stack_template_parameters.yaml
+            name: cloudformation_template_parameters
         - include_role:
             name: create_cloudformation_stack
           vars:
-            cloudformation_stack_name: '{{ lambda_function_name }}'
-            cloudformation_template: files/my_lambda_function_stack.yaml
-            cloudformation_template_parameters: '{{ stack_template_parameters }}'
+            cloudformation_stack_name: "{{ lambda_function_name | replace('_','-') }}"
+            cloudformation_template: files/lambda_function_stack.yaml
             cloudformation_tags: '{{ aws_resource_tags }}'
       vars:
         ansible_python_interpreter: '{{ virtualenv }}/bin/python3'

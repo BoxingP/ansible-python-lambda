@@ -1,7 +1,10 @@
-Description: My Lambda Function
+Description: AWS Lambda Function
 Parameters:
   AWSAccountId:
     Description: AWS Account Id
+    Type: String
+  LambdaFunctionName:
+    Description: AWS Lambda Function Name
     Type: String
   S3Bucket:
     Description: S3 Bucket where the Lambda code is
@@ -73,7 +76,7 @@ Resources:
         S3Bucket: {Ref: S3Bucket}
         S3Key: {Ref: S3Key}
         S3ObjectVersion: {Ref: S3ObjectVersion}
-      Handler: main.lambda_handler
+      Handler: !Sub '${LambdaFunctionName}.lambda_handler'
       MemorySize: 128
       Role: {'Fn::GetAtt': [IAMRole, Arn]}
       Runtime: python3.7

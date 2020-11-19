@@ -2,7 +2,7 @@
 dependencies:
   - role: get_absolute_path_of_directory
     vars:
-      directory: 'build'
+      directory: '{{ build_directory }}'
   - role: get_absolute_path_of_directory
     vars:
-      directory: 'workspace'
+      directory: '{{ files_need_to_zip_directory }}'

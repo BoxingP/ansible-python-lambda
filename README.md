@@ -16,8 +16,8 @@ Usage
 
 1. Run `ansible-galaxy install -r requirements.yaml`. It will install roles included in `requirements.yaml`.
 
-1. Run `ansible-playbook playbook.yaml`. It will create a Cloudformation stack
-   in your AWS account called `my-lambda-function` that runs the example Lambda
+1. Run `ansible-playbook playbook.yaml --extra-vars "email_address=your_email_address"`. It will create a Cloudformation stack
+   in your AWS account called `start-stop-instance` that runs the example Lambda
    function.
 
 Reference

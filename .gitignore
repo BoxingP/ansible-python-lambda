@@ -4,7 +4,5 @@
 playbook.retry
 .idea/
 .vault_pass
-aws_credentials.yaml
-sudo_passwords.yaml
-/library/*
-!/library/requirements.txt
+*/aws_credentials.yaml
+**/vault

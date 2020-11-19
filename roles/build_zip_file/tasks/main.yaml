@@ -1,12 +1,10 @@
 - name: remove any old zip
   file:
-    path: '{{ abs_build_path }}/{{ zip_name }}'
+    path: "{{vars[ 'abs_' + build_directory + '_path' ]}}/{{ zip_name }}"
     state: absent
 
-- name: zip package
-  command: >
-    zip -r
-    {{ abs_build_path }}/{{ zip_name }}
-    .
-  args:
-    chdir: '{{ abs_workspace_path }}'
+- name: zip files
+  community.general.archive:
+    path: "{{vars[ 'abs_' + files_need_to_zip_directory + '_path' ]}}/*"
+    dest: "{{vars[ 'abs_' + build_directory + '_path' ]}}/{{ zip_name }}"
+    format: zip

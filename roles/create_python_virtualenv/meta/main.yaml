@@ -2,4 +2,4 @@
 dependencies:
   - role: get_absolute_path_of_directory
     vars:
-      directory: 'library'
+      directory: '{{ python_requirements_file_directory }}'

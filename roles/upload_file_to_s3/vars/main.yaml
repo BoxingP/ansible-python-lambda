@@ -1,0 +1,2 @@
+---
+upload_file_path: 'build/{{ zip_name }}'

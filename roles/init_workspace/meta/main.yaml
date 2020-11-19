@@ -1,5 +1,0 @@
----
-dependencies:
-  - role: remove_directory
-    vars:
-      directory_to_remove: '{{ workspace_directory }}'
