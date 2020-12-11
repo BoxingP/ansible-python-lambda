@@ -6,19 +6,15 @@
   hosts: localhost
   gather_facts: no
   vars:
-    aws_region: cn-northwest-1
-    git_repo: git@github.com:BoxingP/aws-lambda-python-function.git
-    lambda_function_name: start_stop_instance
-    zip_name: '{{ lambda_function_name }}.zip'
     lambda_function_directory: workspace
-    s3_bucket_name: aws-lambda-functions
-    s3_object_name: '{{ zip_name }}'
+    zip_name: '{{ lambda_function_name }}.zip'
     email_address: creator@example.com
     virtualenv: '{{ hostvars[inventory_hostname].ansible_env.HOME }}/.virtualenvs/ansible-lambda-python-env'
-    cron_schedule: 'cron(0 1-10/9 ? * MON-FRI *)'  #UTC
-    schedule_description: 'Weekdays at 0900 and 1800'
   vars_files:
+    - vars/aws_configuration.yaml
     - vars/aws_credentials.yaml
+    - vars/aws_cron_schedule.yaml
+    - vars/aws_lambda_functions.yaml
   tasks:
     - name: init server environment
       block:

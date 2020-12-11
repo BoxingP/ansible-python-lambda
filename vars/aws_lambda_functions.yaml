@@ -1,0 +1,2 @@
+git_repo: git@github.com:BoxingP/aws-lambda-python-function.git
+lambda_function_name: start_stop_instance

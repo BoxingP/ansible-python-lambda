@@ -1,0 +1,3 @@
+aws_region: cn-northwest-1
+s3_bucket_name: aws-lambda-functions
+s3_object_name: '{{ zip_name }}'
