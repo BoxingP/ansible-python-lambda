@@ -7,8 +7,20 @@
     force: yes
     accept_hostkey: yes
 
-- name: remove .git directory
+- name: find files to delete
+  find:
+    paths: '{{ git_checkout_directory }}'
+    file_type: any
+    hidden: yes
+    excludes:
+      - '{{ lambda_function_name }}.py'
+      - 'requirements.txt'
+  register: found_files
+
+- name: delete useless files
   include_role:
-    name: remove_directory
+    name: remove_file
   vars:
-    directory_to_remove: "{{ git_checkout_directory }}/.git"
+    file_to_remove: '{{ item.path }}'
+  with_items:
+    "{{ found_files['files'] }}"

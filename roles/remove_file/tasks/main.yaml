@@ -1,0 +1,5 @@
+- name: 'remove {{ file_to_remove }}'
+  file:
+    path: '{{ file_to_remove }}'
+    state: absent
+    force: yes
