@@ -6,3 +6,4 @@ playbook.retry
 .vault_pass
 */aws_credentials.yaml
 **/vault
+/vars/lambda_function_stack.yaml

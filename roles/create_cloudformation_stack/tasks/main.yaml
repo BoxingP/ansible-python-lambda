@@ -1,3 +1,9 @@
+- name: generate cloudformation template
+  template:
+    src: ../templates/lambda_function_stack.j2
+    dest: '{{ cloudformation_template }}'
+    force: yes
+
 - name: create cloudformation stack
   amazon.aws.cloudformation:
     region: '{{ aws_region }}'

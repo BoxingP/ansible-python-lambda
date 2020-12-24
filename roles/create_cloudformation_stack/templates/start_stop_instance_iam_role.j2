@@ -1,0 +1,82 @@
+    "IAMRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "Logging",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                      "logs:CreateLogGroup",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws-cn:logs:*:${AWSAccountId}:*"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "PolicyName": "Operating-ec2",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2:StartInstances",
+                      "ec2:StopInstances"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws-cn:ec2:*:${AWSAccountId}:instance/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2:DescribeInstances"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          },
+          {
+            "PolicyName": "Operating-rds",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                      "rds:DescribeDBInstances",
+                      "rds:StopDBInstance",
+                      "rds:StartDBInstance"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:aws-cn:rds:*:${AWSAccountId}:db:*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }

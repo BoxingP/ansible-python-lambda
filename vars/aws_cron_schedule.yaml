@@ -1,2 +1,0 @@
-cron_schedule: 'cron(0 1-10/9 ? * MON-FRI *)'  #UTC
-schedule_description: 'Weekdays at 0900 and 1800'

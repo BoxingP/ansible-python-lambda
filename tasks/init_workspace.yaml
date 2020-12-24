@@ -21,14 +21,6 @@
   vars:
     git_checkout_directory: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}"
 
-- name: copy in condition
-  synchronize:
-    src: 'files/{{ item }}'
-    dest: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}/{{ item | replace( lambda_function_name + '_','') }}"
-    delete: yes
-  with_items:
-    [ '{{ lambda_function_name }}_tags_filter.yaml', '{{ lambda_function_name }}_policy.py' ]
-
 - name: setup.cfg for no prefix
   copy:
     dest: "{{vars[ 'abs_' + workspace_directory + '_path' ]}}/setup.cfg"

@@ -4,5 +4,3 @@ S3Bucket: '{{ s3_bucket_name }}'
 S3Key: '{{ zip_name }}'
 S3ObjectVersion: '{{ s3_object_version_id }}'
 Email: '{{ email_address }}'
-CronSchedule: '{{ cron_schedule }}'
-ScheduleDescription: "{{ schedule_description }}"

@@ -13,7 +13,6 @@
   vars_files:
     - vars/aws_configuration.yaml
     - vars/aws_credentials.yaml
-    - vars/aws_cron_schedule.yaml
     - vars/aws_lambda_functions.yaml
   tasks:
     - name: init server environment
@@ -33,7 +32,7 @@
       block:
         - name: load aws tags needed to add when creating resources
           include_vars:
-            file: files/resource_tags.yaml
+            file: vars/resource_tags.yaml
             name: aws_resource_tags
         - include_role:
             name: create_s3_bucket
@@ -45,13 +44,13 @@
             name: get_s3_object_version_id
         - name: load cloudformation template parameters
           include_vars:
-            file: files/lambda_function_stack_template_parameters.yaml
+            file: vars/lambda_function_stack_template_parameters.yaml
             name: cloudformation_template_parameters
         - include_role:
             name: create_cloudformation_stack
           vars:
             cloudformation_stack_name: "{{ lambda_function_name | replace('_','-') }}"
-            cloudformation_template: files/lambda_function_stack.yaml
+            cloudformation_template: vars/lambda_function_stack.yaml
             cloudformation_tags: '{{ aws_resource_tags }}'
       vars:
         ansible_python_interpreter: '{{ virtualenv }}/bin/python3'
